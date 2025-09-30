@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api';
+import { criarUsuario } from '../../services/usuariosService';
 
 export default function AdicionarUsuario() {
   const navigation = useNavigation();
@@ -26,11 +26,7 @@ export default function AdicionarUsuario() {
     }
 
     try {
-      await api.post('/usuarios', {
-        email: email,
-        senha: senha,
-        papel: papel.toUpperCase(),
-      });
+      await criarUsuario({ email, senha, papel: papel.toUpperCase() });
 
       setPopupVisivel(true);
     } catch (error) {

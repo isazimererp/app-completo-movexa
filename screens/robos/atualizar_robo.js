@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import api from '../../services/api';
+import { atualizarRobo } from '../../services/robosService';
 
 export default function AtualizarRobo() {
   const navigation = useNavigation();
@@ -30,13 +30,13 @@ export default function AtualizarRobo() {
       return;
     }
   
-    if (nivel > 100) {
+    if (parseFloat(nivel) > 100) {
       alert('Nível de bateria não pode ser maior que 100%');
       return;
     }
 
     try {
-      await api.put(`/robos-agv/${robo.id}`, {
+      await atualizarRobo(robo.id, {
         identificador: id,
         consumoBateria: parseFloat(consumo),
         nivelBateria: parseFloat(nivel),

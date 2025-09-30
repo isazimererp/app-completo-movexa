@@ -1,85 +1,87 @@
 import React from 'react';
-import { useStyles, createStyleSheet } from 'styles';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { LogoMovexa } from 'components/page-1/base/logo-movexa';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export function Inicio(props) {
-  const { styles } = useStyles(stylesheet);
+export default function Home() {
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.root} testID={props.testID ?? '92:6'}>
-
+    <View style={styles.root}>
       {/* Logo */}
-      <LogoMovexa testID="92:5" />
+      <View style={styles.logoContainer}>
+        <Text style={styles.logoText}>MOVEXA</Text>
+        <Text style={styles.logoSubtext}>Sistema de Gestão de Robôs</Text>
+      </View>
 
       {/* Botão Login */}
       <TouchableOpacity
         style={styles.botaoLogin}
-        onPress={() => props.navigation.navigate('Login')}
+        onPress={() => navigation.navigate('Login')}
       >
-        <View style={styles.rectangle3} />
-        <Text style={styles.login}>Login</Text>
+        <Text style={styles.textoLogin}>Login</Text>
       </TouchableOpacity>
 
       {/* Botão Registre-se */}
       <TouchableOpacity
         style={styles.botaoRegistreSe}
-        onPress={() => props.navigation.navigate('Register')}
+        onPress={() => navigation.navigate('RegistreSe')}
       >
-        <View style={styles.rectangle4} />
-        <Text style={styles.registreSe}>Registre-se</Text>
+        <Text style={styles.textoRegistreSe}>Registre-se</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+const styles = StyleSheet.create({
   root: {
-    width: 393,
-    height: 852,
-    backgroundColor: 'rgba(234, 234, 234, 0.658823549747467)',
+    flex: 1,
+    backgroundColor: '#D3D3D3',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
-  rectangle3: {
-    width: 232,
-    height: 45,
-    borderRadius: 45,
-    borderWidth: 1,
-    borderColor: '#000',
-    backgroundColor: '#000',
-    justifyContent: 'center',
+  logoContainer: {
     alignItems: 'center',
+    marginBottom: 80,
   },
-  login: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '900',
+  logoText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 10,
+  },
+  logoSubtext: {
+    fontSize: 16,
+    color: '#666',
     textAlign: 'center',
   },
   botaoLogin: {
-    marginTop: 10,
+    backgroundColor: '#000',
+    paddingVertical: 15,
+    paddingHorizontal: 60,
+    borderRadius: 25,
+    marginBottom: 20,
+    width: '80%',
     alignItems: 'center',
   },
-  rectangle4: {
-    width: 232,
-    height: 45,
-    borderRadius: 45,
-    borderWidth: 1,
-    borderColor: '#000',
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  registreSe: {
-    color: '#000',
+  textoLogin: {
+    color: '#fff',
     fontSize: 20,
-    fontWeight: '900',
-    textAlign: 'center',
+    fontWeight: 'bold',
   },
   botaoRegistreSe: {
-    marginTop: 10,
+    backgroundColor: '#fff',
+    paddingVertical: 15,
+    paddingHorizontal: 60,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#000',
+    width: '80%',
     alignItems: 'center',
   },
-}));
+  textoRegistreSe: {
+    color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});

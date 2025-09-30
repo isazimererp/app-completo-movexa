@@ -8,8 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { listarUsuarios, deletarUsuario } from '../../services/usuariosService';
 
 export default function ExcluirUsuario() {
   const navigation = useNavigation();
@@ -20,26 +19,13 @@ export default function ExcluirUsuario() {
   const [usuarioLogado, setUsuarioLogado] = useState('');
 
   useEffect(() => {
-    carregarUsuarioLogado();
     carregarUsuarios();
   }, []);
 
-  const carregarUsuarioLogado = async () => {
-    try {
-      const usuarioString = await AsyncStorage.getItem('usuarioLogado');
-      if (usuarioString) {
-        const usuario = JSON.parse(usuarioString);
-        setUsuarioLogado(usuario.email); // 🔥 Usar email como referência
-      }
-    } catch (error) {
-      console.log('Erro ao carregar usuário logado:', error);
-    }
-  };
-
   const carregarUsuarios = async () => {
     try {
-      const response = await api.get('/usuarios');
-      setUsuarios(response.data);
+      const data = await listarUsuarios();
+      setUsuarios(data);
     } catch (error) {
       console.log('Erro ao carregar usuários:', error);
     }
@@ -57,7 +43,7 @@ export default function ExcluirUsuario() {
 
   const excluirUsuario = async () => {
     try {
-      await api.delete(`/usuarios/${usuarioSelecionado.id}`);
+      await deletarUsuario(usuarioSelecionado.id);
 
       const novaLista = usuarios.filter(
         (item) => item.id !== usuarioSelecionado.id
@@ -76,7 +62,7 @@ export default function ExcluirUsuario() {
   };
 
   const renderItem = ({ item }) => {
-    const isUserAtual = item.email === usuarioLogado;
+    const isUserAtual = usuarioLogado && item.email === usuarioLogado;
 
     return (
       <View
