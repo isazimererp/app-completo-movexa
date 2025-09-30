@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { View, TextInput, TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useStyles, createStyleSheet } from 'styles';
+import { useAuth } from '../../contexts/AuthContext';
 
-export function Login() {
-  const { styles } = useStyles(stylesheet);
+export default function Login() {
   const navigation = useNavigation();
   const { signIn } = useAuth();
 
@@ -18,23 +16,32 @@ export function Login() {
       return;
     }
 
-    const result = await signIn(email, senha);
-    if (result.success) {
-      Alert.alert('Sucesso', 'Login realizado com sucesso!');
-      navigation.navigate('Dashboard');
-    } else {
-      Alert.alert('Erro', result.message);
+    try {
+      const data = await signIn(email, senha);
+      if (data?.token) {
+        Alert.alert('Sucesso', 'Login realizado com sucesso!');
+        navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
+      } else {
+        Alert.alert('Erro', data?.message || 'Credenciais inválidas');
+      }
+    } catch (error) {
+      console.log('Erro no login:', error);
+      Alert.alert('Erro', 'Erro ao fazer login. Tente novamente.');
     }
   };
 
   return (
     <View style={styles.root}>
+      <Text style={styles.titulo}>Login</Text>
+      
       <TextInput
         placeholder="Email"
         placeholderTextColor="#aaa"
         style={styles.input}
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
 
       <TextInput
@@ -52,40 +59,55 @@ export function Login() {
 
       <TouchableOpacity
         style={styles.botaoSecundario}
-        onPress={() => navigation.navigate('EsqueciSenha')}
+        onPress={() => navigation.navigate('EsqueciSenha', { origem: 'login' })}
       >
         <Text style={styles.textoBotaoSecundario}>Esqueci a senha</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={styles.botaoSecundario}
+        onPress={() => navigation.navigate('RegistreSe')}
+      >
+        <Text style={styles.textoBotaoSecundario}>Criar conta</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const stylesheet = createStyleSheet(() => ({
+const styles = StyleSheet.create({
   root: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(234, 234, 234, 0.658)',
+    backgroundColor: '#D3D3D3',
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: '#000',
   },
   input: {
     width: '90%',
     height: 50,
     borderWidth: 1,
     borderColor: '#000',
-    borderRadius: 10,
-    paddingLeft: 10,
+    borderRadius: 25,
+    paddingHorizontal: 20,
     marginBottom: 15,
     backgroundColor: '#fff',
     color: '#000',
   },
   botao: {
     backgroundColor: '#000',
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 25,
     marginTop: 10,
+    width: '90%',
+    alignItems: 'center',
   },
   textoBotao: {
     color: '#fff',
@@ -93,17 +115,16 @@ const stylesheet = createStyleSheet(() => ({
     fontWeight: 'bold',
   },
   botaoSecundario: {
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     paddingVertical: 10,
     paddingHorizontal: 40,
     borderRadius: 25,
-    borderWidth: 1,
-    borderColor: '#000',
     marginTop: 10,
   },
   textoBotaoSecundario: {
     color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
-}));
+});

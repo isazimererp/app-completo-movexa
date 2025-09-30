@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Alert } from 'react-native';
-import api from '../services/api';
+import { criarPedido } from '../../services/pedidos';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AdicionarPedido() {
@@ -19,7 +19,7 @@ export default function AdicionarPedido() {
     }
 
     try {
-      await api.post('/coletas', {
+      await criarPedido({
         origem,
         destino,
         usuarioId: parseInt(usuarioId) // 🔥 o backend espera número

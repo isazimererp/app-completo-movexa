@@ -8,12 +8,12 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import api from '../../services/api';
+import { atualizarUsuario } from '../../services/usuariosService';
 
 export default function AlterarUsuario() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { usuario } = route.params;
+  const { usuario } = route.params || { usuario: {} };
 
   const [email, setEmail] = useState(usuario.email);
   const [senha, setSenha] = useState('');
@@ -22,13 +22,11 @@ export default function AlterarUsuario() {
   const [popupConfirmar, setPopupConfirmar] = useState(false);
   const [popupSucesso, setPopupSucesso] = useState(false);
 
-  const atualizarUsuario = async () => {
+  const atualizar = async () => {
     try {
-      await api.put(`/usuarios/${usuario.id}`, {
-        email: email,
-        senha: senha,
-        papel: papel.toUpperCase(),
-      });
+      const payload = { email, papel: papel.toUpperCase() };
+      if (senha && senha.trim()) payload.senha = senha;
+      await atualizarUsuario(usuario.id, payload);
       setPopupConfirmar(false);
       setPopupSucesso(true);
     } catch (error) {
@@ -102,7 +100,7 @@ export default function AlterarUsuario() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.botaoConfirmar}
-                onPress={atualizarUsuario}
+                onPress={atualizar}
               >
                 <Text style={styles.textoConfirmar}>Confirmar e salvar</Text>
               </TouchableOpacity>

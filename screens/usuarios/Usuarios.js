@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { listarPedidos } from '../../services/pedidos';
+import { listarUsuarios } from '../../services/usuariosService';
 
-export default function Pedidos() {
+export default function Usuarios() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,10 +10,10 @@ export default function Pedidos() {
   useEffect(() => {
     (async () => {
       try {
-        const items = await listarPedidos();
-        setData(items);
+        const users = await listarUsuarios();
+        setData(users);
       } catch (e) {
-        setError('Erro ao carregar pedidos');
+        setError('Erro ao carregar usuários');
       } finally {
         setLoading(false);
       }
@@ -25,13 +25,13 @@ export default function Pedidos() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Coletas</Text>
+      <Text style={styles.title}>Usuários</Text>
       <FlatList
         data={data}
         keyExtractor={(item, idx) => String(item.id ?? idx)}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={styles.item}>{item.origem} → {item.destino} • {item.status}</Text>
+            <Text style={styles.item}>{item.email} • {item.papel}</Text>
           </View>
         )}
       />

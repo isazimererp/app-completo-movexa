@@ -1,70 +1,112 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useStyles, createStyleSheet } from 'styles';
-import { Dashboard as DashboardTitle } from 'components/page-1/base/dashboard';
 
-export default function DashboardScreen(props) {
-  const { styles } = useStyles(stylesheet);
+export default function Dashboard() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.root} testID={props.testID ?? '101:45'}>
-      <DashboardTitle testID="101:40" />
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Dashboard - MOVEXA</Text>
 
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={() => navigation.navigate('Entregas')}
-      >
-        <Text style={styles.textoBotao}>Entregas</Text>
-      </TouchableOpacity>
+      <View style={styles.menuContainer}>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate('Entregas')}
+        >
+          <Text style={styles.textoBotao}>📦 Entregas</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={() => navigation.navigate('Pedidos')}
-      >
-        <Text style={styles.textoBotao}>Pedidos</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate('Pedidos')}
+        >
+          <Text style={styles.textoBotao}>📋 Pedidos</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={() => navigation.navigate('Robos')}
-      >
-        <Text style={styles.textoBotao}>Robôs</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate('Robos')}
+        >
+          <Text style={styles.textoBotao}>🤖 Robôs</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={() => navigation.navigate('Configuracoes')}
-      >
-        <Text style={styles.textoBotao}>Configurações</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate('GerenciarUsuarios')}
+        >
+          <Text style={styles.textoBotao}>👥 Usuários</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => navigation.navigate('MeuPerfil')}
+        >
+          <Text style={styles.textoBotao}>⚙️ Meu Perfil</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botaoSair}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.textoBotaoSair}>Sair</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
-const stylesheet = createStyleSheet((theme) => ({
-  root: {
-    width: 393,
-    height: 852,
-    backgroundColor: 'rgba(234, 234, 234, 0.66)',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D3D3D3',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+    padding: 20,
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    color: '#000',
+  },
+  menuContainer: {
+    width: '100%',
+    alignItems: 'center',
+    gap: 15,
   },
   botao: {
-    width: 250,
+    width: '80%',
     height: 50,
-    backgroundColor: 'white',
-    borderRadius: 30,
+    backgroundColor: '#fff',
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'black',
+    borderColor: '#000',
     borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   textoBotao: {
-    color: 'black',
+    color: '#000',
     fontWeight: 'bold',
     fontSize: 18,
   },
-}));
+  botaoSair: {
+    width: '60%',
+    height: 45,
+    backgroundColor: '#ff4444',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  textoBotaoSair: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});

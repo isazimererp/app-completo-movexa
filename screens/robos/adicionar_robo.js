@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api';
+import { criarRobo } from '../../services/robosService';
 
 export default function AdicionarRobo() {
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ export default function AdicionarRobo() {
     }
   
     try {
-      await api.post('/robos-agv', {
+      await criarRobo({
         identificador: id,
         consumoBateria: parseFloat(consumo),
         nivelBateria: parseFloat(nivel),

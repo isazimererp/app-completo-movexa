@@ -1,44 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../../services/api';
+import { listarUsuarios } from '../../services/usuariosService';
 
 export default function GerenciarUsuarios() {
   const navigation = useNavigation();
   const [usuarios, setUsuarios] = useState([]);
-  const [usuarioLogado, setUsuarioLogado] = useState('');
+  // Apenas listagem e navegação; usuário logado não é necessário aqui
 
   useEffect(() => {
     carregarUsuarios();
-    carregarUsuarioLogado();
   }, []);
 
   const carregarUsuarios = async () => {
     try {
-      const response = await api.get('/usuarios');
-      setUsuarios(response.data);
+      const response = await listarUsuarios();
+      setUsuarios(response);
     } catch (error) {
       console.log('Erro ao carregar usuários:', error);
-    }
-  };
-
-  const carregarUsuarioLogado = async () => {
-    try {
-      const usuarioString = await AsyncStorage.getItem('usuarioLogado');
-      if (usuarioString) {
-        const usuario = JSON.parse(usuarioString);
-        const nomeCompleto = `${usuario.nome} ${usuario.sobrenome}`;
-        setUsuarioLogado(nomeCompleto);
-      }
-    } catch (error) {
-      console.log('Erro ao carregar usuário logado:', error);
     }
   };
 
@@ -55,18 +34,6 @@ export default function GerenciarUsuarios() {
     );
   };
   
-
-    return (
-      <View style={styles.usuarioItem}>
-        <Text style={styles.nomeUsuario}>{nomeCompleto}</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('AlterarUsuario', { usuario: item })}
-        >
-          <Text style={styles.seta}>➝</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
 
   return (
     <View style={styles.container}>

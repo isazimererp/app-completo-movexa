@@ -8,12 +8,12 @@ import {
   Modal,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import api from '../../services/api';
+import api from '../services/api.js/api';
 
 export default function EsqueciSenha() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { origem } = route.params;
+  const origem = route?.params?.origem ?? null;
 
   const [email, setEmail] = useState('');
   const [popupVisivel, setPopupVisivel] = useState(false);
